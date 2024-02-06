@@ -24,6 +24,15 @@ const (
 	JP  Region = "jp"
 )
 
+type MessageType string
+
+const (
+	DefaultMessage  MessageType = "message"
+	Respone         MessageType = "response"
+	Request         MessageType = "request"
+	RequestResponse MessageType = "requestResponse"
+)
+
 type InstanceId struct {
 	Name    string
 	Privacy Privacy
@@ -39,6 +48,14 @@ func (i *InstanceId) String() string {
 type InviteRequest struct {
 	InstanceId  string `json:"instanceId"`
 	MessageSlot int    `json:"messageSlot"`
+}
+
+type RequestInviteRequest struct {
+	MessageSlot int `json:"messageSlot"`
+}
+
+type InviteResponse struct {
+	MessageSlot int `json:"messageSlot"`
 }
 
 type TwoFactorAuthCode struct {
@@ -129,4 +146,48 @@ type CurrentUser struct {
 	Unsubscribe              bool      `json:"unsubscribe"`
 	UpdatedAt                time.Time `json:"updated_at"`
 	UserIcon                 string    `json:"userIcon"`
+}
+
+type Avatar struct {
+	AssetUrl       string `json:"assetUrl"`
+	AssetUrlObject struct {
+	} `json:"assetUrlObject"`
+	AuthorId          string    `json:"authorId"`
+	AuthorName        string    `json:"authorName"`
+	CreatedAt         time.Time `json:"created_at"`
+	Description       string    `json:"description"`
+	Featured          bool      `json:"featured"`
+	Id                string    `json:"id"`
+	ImageUrl          string    `json:"imageUrl"`
+	Name              string    `json:"name"`
+	ReleaseStatus     string    `json:"releaseStatus"`
+	Tags              []string  `json:"tags"`
+	ThumbnailImageUrl string    `json:"thumbnailImageUrl"`
+	UnityPackageUrl   string    `json:"unityPackageUrl"`
+	UnityPackages     []struct {
+		AssetUrl       string `json:"assetUrl"`
+		AssetUrlObject struct {
+		} `json:"assetUrlObject"`
+		AssetVersion    int       `json:"assetVersion"`
+		CreatedAt       time.Time `json:"created_at"`
+		Id              string    `json:"id"`
+		Platform        string    `json:"platform"`
+		PluginUrl       string    `json:"pluginUrl"`
+		PluginUrlObject struct {
+		} `json:"pluginUrlObject"`
+		UnitySortNumber int64  `json:"unitySortNumber"`
+		UnityVersion    string `json:"unityVersion"`
+	} `json:"unityPackages"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Version   int       `json:"version"`
+}
+
+type Message struct {
+	CanBeUpdated             bool      `json:"canBeUpdated"`
+	Id                       string    `json:"id"`
+	Message                  string    `json:"message"`
+	MessageType              string    `json:"messageType"`
+	RemainingCooldownMinutes int       `json:"remainingCooldownMinutes"`
+	Slot                     int       `json:"slot"`
+	UpdatedAt                time.Time `json:"updatedAt"`
 }
