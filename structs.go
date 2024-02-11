@@ -28,7 +28,7 @@ type MessageType string
 
 const (
 	DefaultMessage  MessageType = "message"
-	Respone         MessageType = "response"
+	Response        MessageType = "response"
 	Request         MessageType = "request"
 	RequestResponse MessageType = "requestResponse"
 )
@@ -64,6 +64,26 @@ type TwoFactorAuthCode struct {
 
 type Verify2FAResult struct {
 	Verified bool `json:"verified"`
+}
+
+type SentNotification struct {
+	Id             string `json:"id"`
+	RecieverUserId string `json:"recieverUserId"`
+	SenderUserId   string `json:"senderUserId"`
+	Type           string `json:"type"`
+	Message        string `json:"message"`
+	Details        string `json:"details"`
+	CreatedAt      string `json:"created_at"`
+}
+
+type Notification struct {
+	Id           string    `json:"id"`
+	SenderUserId string    `json:"senderUserId"`
+	Type         string    `json:"type"`
+	Message      string    `json:"message"`
+	Details      string    `json:"details"`
+	Seen         bool      `json:"seen"`
+	CreatedAt    time.Time `json:"created_at"`
 }
 
 type CurrentUser struct {

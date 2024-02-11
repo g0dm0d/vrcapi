@@ -44,6 +44,7 @@ var (
 	}
 
 	// AVATARS
+
 	EndpointGetOwnAvatar = func(userID string) string {
 		return EndpointAPI + "user/" + userID + "/avatar"
 	}
