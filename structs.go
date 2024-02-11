@@ -50,6 +50,20 @@ type InviteRequest struct {
 	MessageSlot int    `json:"messageSlot"`
 }
 
+type Error struct {
+	Error struct {
+		Message    string `json:"message"`
+		StatusCode int    `json:"status_code"`
+	} `json:"error"`
+}
+
+type Success struct {
+	Success struct {
+		Message    string `json:"message"`
+		StatusCode int    `json:"status_code"`
+	} `json:"success"`
+}
+
 type RequestInviteRequest struct {
 	MessageSlot int `json:"messageSlot"`
 }
@@ -58,12 +72,22 @@ type InviteResponse struct {
 	MessageSlot int `json:"messageSlot"`
 }
 
+type UpdateInviteMessageRequest struct {
+	Message string `json:"message"`
+}
+
 type TwoFactorAuthCode struct {
 	Code string `json:"code"`
 }
 
 type Verify2FAResult struct {
 	Verified bool `json:"verified"`
+}
+
+type FriendStatus struct {
+	IsFriend        bool `json:"isFriend"`
+	OutgoingRequest bool `json:"outgoingRequest"`
+	IncomingRequest bool `json:"incomingRequest"`
 }
 
 type SentNotification struct {
@@ -210,4 +234,23 @@ type Message struct {
 	RemainingCooldownMinutes int       `json:"remainingCooldownMinutes"`
 	Slot                     int       `json:"slot"`
 	UpdatedAt                time.Time `json:"updatedAt"`
+}
+
+type LimitedUser struct {
+	Bio                            string   `json:"bio"`
+	CurrentAvatarImageUrl          string   `json:"currentAvatarImageUrl"`
+	CurrentAvatarThumbnailImageUrl string   `json:"currentAvatarThumbnailImageUrl"`
+	DeveloperType                  string   `json:"developerType"`
+	DisplayName                    string   `json:"displayName"`
+	FallbackAvatar                 string   `json:"fallbackAvatar"`
+	Id                             string   `json:"id"`
+	IsFriend                       bool     `json:"isFriend"`
+	LastPlatform                   string   `json:"last_platform"`
+	ProfilePicOverride             string   `json:"profilePicOverride"`
+	Status                         string   `json:"status"`
+	StatusDescription              string   `json:"statusDescription"`
+	Tags                           []string `json:"tags"`
+	UserIcon                       string   `json:"userIcon"`
+	Location                       string   `json:"location"`
+	FriendKey                      string   `json:"friendKey"`
 }

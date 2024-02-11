@@ -67,13 +67,8 @@ func (s *Session) TwoFactorAuth(twoFactorSecret string) error {
 		return err
 	}
 
-	resp, err := s.request("POST", Endpoint2FA, "application/json", body)
-	if err != nil {
-		return err
-	}
-
 	var response Verify2FAResult
-	err = json.Unmarshal(resp, &response)
+	err = s.request("POST", Endpoint2FA, "application/json", body, &response)
 	if err != nil {
 		return err
 	}
@@ -86,13 +81,8 @@ func (s *Session) TwoFactorAuth(twoFactorSecret string) error {
 }
 
 func (s *Session) InitUser() error {
-	resp, err := s.request("GET", EndpointLogin, "", nil)
-	if err != nil {
-		return err
-	}
-
 	var response CurrentUser
-	err = json.Unmarshal(resp, &response)
+	err := s.request("GET", EndpointLogin, "", nil, &response)
 	if err != nil {
 		return err
 	}
@@ -102,13 +92,13 @@ func (s *Session) InitUser() error {
 	return nil
 }
 
-func (s *Session) request(method, urlStr, contentType string, body []byte) (response []byte, err error) {
+func (s *Session) request(method, urlStr, contentType string, body []byte, response interface{}) (err error) {
 	req, err := http.NewRequest(method, urlStr, bytes.NewBuffer(body))
 	if err != nil {
 		return
 	}
 
-	req.Header.Set("User-Agent", "vrchat events bot - discord: @godmod, github: g0dm0d")
+	req.Header.Set("User-Agent", "go vrcapi  - discord: @godmod, github: g0dm0d")
 
 	if body != nil {
 		req.Header.Add("Content-Type", contentType)
@@ -116,23 +106,32 @@ func (s *Session) request(method, urlStr, contentType string, body []byte) (resp
 
 	resp, err := s.Client.Do(req)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	defer resp.Body.Close()
-	response, err = io.ReadAll(resp.Body)
+	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	switch resp.StatusCode {
 	case http.StatusOK:
+		err = json.Unmarshal(respBody, &response)
+		if err != nil {
+			return err
+		}
 	case http.StatusBadGateway:
-		return nil, fmt.Errorf("bad gateway")
+		return fmt.Errorf("bad gateway")
 	case http.StatusTooManyRequests:
 		// ratelimit
 	default:
-		return nil, fmt.Errorf(string(response))
+		var errorInfo Error
+		err = json.Unmarshal(respBody, &errorInfo)
+		if err != nil {
+			return err
+		}
+		return fmt.Errorf(errorInfo.Error.Message)
 	}
 
 	return

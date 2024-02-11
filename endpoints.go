@@ -1,11 +1,19 @@
 package vrcapi
 
+import "strconv"
+
 var (
 	EndpointVRC = "https://vrchat.com/"
 	EndpointAPI = "https://api.vrchat.cloud/api/1/"
 
 	EndpointLogin = EndpointAPI + "auth/user"
 	Endpoint2FA   = EndpointAPI + "auth/twofactorauth/totp/verify"
+
+	// INSTANCES
+
+	EndpointGetInstance = func(worldId string, instanceId InstanceId) string {
+		return EndpointAPI + "instances/" + worldId + ":" + instanceId.String()
+	}
 
 	EndpointInstance = func(worldId string, instanceId InstanceId) string {
 		return EndpointAPI + "instances/" + worldId + ":" + instanceId.String()
@@ -39,13 +47,37 @@ var (
 		return EndpointAPI + "message/" + userId + "/" + string(messageType)
 	}
 
-	EndpointFriendRequest = func(userID string) string {
-		return EndpointAPI + "user/" + userID + "/friendRequest"
+	EndpointGetInviteMessage = func(userId string, messageType MessageType, slot int) string {
+		return EndpointAPI + "message/" + userId + "/" + string(messageType) + "/" + strconv.Itoa(slot)
+	}
+
+	EndpointUpdateInviteMessage = func(userId string, messageType MessageType, slot int) string {
+		return EndpointAPI + "message/" + userId + "/" + string(messageType) + "/" + strconv.Itoa(slot)
+	}
+
+	EndpointResetInviteMessage = func(userId string, messageType MessageType, slot int) string {
+		return EndpointAPI + "message/" + userId + "/" + string(messageType) + "/" + strconv.Itoa(slot)
 	}
 
 	// AVATARS
 
 	EndpointGetOwnAvatar = func(userID string) string {
 		return EndpointAPI + "user/" + userID + "/avatar"
+	}
+
+	// FRIENDS
+
+	EndpointListFriends = EndpointAPI + "auth/user/friends?offline=true"
+
+	EndpointFriendRequest = func(userID string) string {
+		return EndpointAPI + "user/" + userID + "/friendRequest"
+	}
+
+	EndpointCheckFriendStatus = func(userID string) string {
+		return EndpointAPI + "user/" + userID + "/friendStatus"
+	}
+
+	EndpointUnfriend = func(userID string) string {
+		return EndpointAPI + "auth/user/friends/" + userID
 	}
 )
